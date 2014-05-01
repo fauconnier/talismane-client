@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<project name="talismane_client" default="build">
+	<property name="build.dir" value="bin" />
+	<property name="src.dir" value="src" />
+	<property name="dist.dir" value="dist" />
+	<property name="main.class" value="talismane_client.main.Main_Jar" />
+	<property name="develop" value="Jean-Philippe Fauconnier" />
+	<property name="application.title" value="talismane-client" />
+	<property name="application.version" value="1.0.0b" />
+
+	<!-- Date -->
+	<tstamp>
+		<format property="TODAY_GB" pattern="d-MM-yyyy" locale="en,GB" />
+	</tstamp>
+
+	<!-- task:clean -->
+	<target name="clean" description="Clean workspace">
+		<delete dir="${build.dir}" />
+		<delete dir="${dist.dir}" />
+	</target>
+
+	<!-- task:init -->
+	<target name="init" description="Create bin directory">
+		<mkdir dir="${build.dir}" />
+	</target>
+
+	<!-- task:build -->
+	<target name="build" depends="clean, init" description="Build project">
+		<javac srcdir="${src.dir}" destdir="${build.dir}" encoding="UTF-8" includeantruntime="false" />
+	</target>
+
+	<!-- task:dist -->
+	<target name="jar" depends="build" description="Generate .jar for the project">
+		<!-- create dist directory -->
+		<mkdir dir="${dist.dir}" />
+		<!-- copy resources -->
+		<copy todir="${dist.dir}/samples/">
+			<fileset dir="samples" />
+		</copy>
+
+		<!-- create jar -->
+		<jar destfile="${dist.dir}/${application.title}-${application.version}.jar" basedir="${build.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}" />
+				<attribute name="Created-By" value="${develop}" />
+				<attribute name="Implementation-Title" value="${application.title}" />
+				<attribute name="Implementation-Version" value="${application.version}" />
+			</manifest>
+			<fileset dir=".">
+				<include name="LICENCE" />
+			</fileset>
+		</jar>
+	</target>
+
+</project>
+
